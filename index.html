@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>URLA Campus Software Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon:#7A1E2C; --maroon-ink:#5E1420; --gold:#C9A227; --gold-soft:#F3E7BE;
+  --ink:#231C1D; --muted:#6B5F61; --paper:#FFFFFF; --mist:#F4F0F0; --line:#E4DADB;
+  --tag-bg:#7A1E2C; --tag-ink:#FFF7F0; --band-ink:#FFF7F0; --focus:#C9A227;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --maroon:#E07A8A; --maroon-ink:#F2A5B1; --gold:#E2BE4F; --gold-soft:#3A3220;
+  --ink:#F3ECEC; --muted:#B8AAAD; --paper:#181314; --mist:#221B1C; --line:#3A2F31;
+  --tag-bg:#6E1A27; --tag-ink:#FFF1EA; --band-ink:#FFF1EA;
+}}
+:root[data-theme="dark"]{
+  --maroon:#E07A8A; --maroon-ink:#F2A5B1; --gold:#E2BE4F; --gold-soft:#3A3220;
+  --ink:#F3ECEC; --muted:#B8AAAD; --paper:#181314; --mist:#221B1C; --line:#3A2F31;
+  --tag-bg:#6E1A27; --tag-ink:#FFF1EA; --band-ink:#FFF1EA;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:1rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:72rem;margin:0 auto;padding:0 1.25rem}
+
+/* Header band */
+.band{background:#7A1E2C;color:var(--band-ink);border-bottom:6px solid #C9A227}
+.band .wrap{padding-top:2.75rem;padding-bottom:2.5rem}
+.org{font-size:.95rem;font-weight:600;opacity:.85;margin:0 0 1.25rem}
+h1{font-stretch:118%;font-weight:800;font-size:clamp(2.1rem,6vw,3.75rem);line-height:1.02;
+  letter-spacing:-.01em;margin:0 0 1rem;max-width:16ch}
+.lede{font-size:1.125rem;max-width:56ch;margin:0 0 1.75rem;opacity:.92}
+.search{position:relative;max-width:40rem}
+.search input{width:100%;font:inherit;font-size:1.125rem;padding:1rem 1.1rem 1rem 3rem;
+  border-radius:10px;border:2px solid transparent;background:#FFF7F0;color:#231C1D}
+.search input::placeholder{color:#7d6e70}
+.search input:focus{outline:none;border-color:#C9A227}
+.search svg{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#7A1E2C}
+.facts{display:flex;flex-wrap:wrap;gap:1.5rem;margin:1.5rem 0 0;padding:0;list-style:none;font-size:.95rem}
+.facts b{font-stretch:112%;font-size:1.15rem}
+
+/* Everywhere strip */
+.everywhere{background:var(--mist);border-bottom:1px solid var(--line)}
+.everywhere .wrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem 1.25rem;padding-top:1.1rem;padding-bottom:1.1rem}
+.everywhere h2{font-size:1rem;margin:0;font-weight:700}
+.everywhere ul{display:flex;flex-wrap:wrap;gap:.4rem .9rem;list-style:none;margin:0;padding:0;color:var(--muted)}
+
+/* Controls */
+.controls{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);
+  top:env(safe-area-inset-top,0px)}
+.controls .wrap{padding-top:.9rem;padding-bottom:.9rem;display:flex;flex-direction:column;gap:.75rem}
+.seg{display:inline-flex;border:2px solid var(--maroon);border-radius:999px;overflow:hidden;align-self:flex-start}
+.seg button{border:0;background:none;padding:.45rem 1.1rem;font-weight:700;cursor:pointer;color:var(--maroon)}
+.seg button[aria-pressed="true"]{background:var(--maroon);color:var(--paper)}
+.chips{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.15rem;scrollbar-width:thin}
+.chip{flex:none;border:1px solid var(--line);background:var(--paper);border-radius:999px;
+  padding:.35rem .85rem;font-size:.9rem;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);font-weight:700}
+
+main .wrap{padding-top:1.75rem;padding-bottom:3rem}
+.status{color:var(--muted);margin:0 0 1rem;font-size:.95rem}
+h3.group{font-stretch:112%;font-size:1.3rem;margin:2rem 0 .5rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink)}
+h3.group:first-child{margin-top:0}
+
+/* App rows */
+.list{list-style:none;margin:0;padding:0}
+.row{border-bottom:1px solid var(--line)}
+.row>button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:1fr auto;gap:.25rem 1rem;
+  width:100%;padding:.85rem .25rem;cursor:pointer}
+.row>button:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.row>button:hover .name{color:var(--maroon)}
+.name{font-weight:700;font-size:1.05rem}
+.desc{grid-column:1;color:var(--muted);font-size:.95rem}
+.count{grid-row:1/3;grid-column:2;align-self:center;text-align:right;font-size:.9rem;color:var(--muted);white-space:nowrap}
+.count b{display:block;font-stretch:115%;font-size:1.35rem;color:var(--ink);line-height:1.1}
+.lic{display:inline-block;margin-left:.5rem;font-size:.75rem;font-weight:700;padding:.1rem .45rem;border-radius:4px;
+  background:var(--gold-soft);color:var(--ink);vertical-align:2px}
+.where{padding:.25rem .25rem 1.1rem}
+.where p{margin:0 0 .6rem;font-size:.9rem;color:var(--muted)}
+
+/* Room plaques: the signature element */
+.plaques{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;margin:0;padding:0}
+.plaque{display:inline-flex;flex-direction:column;background:var(--tag-bg);color:var(--tag-ink);
+  border-radius:4px;padding:.35rem .65rem .4rem;border-bottom:3px solid #C9A227;min-width:6.5rem}
+.plaque .code{font-stretch:120%;font-weight:800;font-size:1rem;letter-spacing:.02em;line-height:1.15}
+.plaque .lbl{font-size:.75rem;opacity:.85}
+
+/* Room cards */
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:1rem;list-style:none;margin:0;padding:0}
+.room{border:1px solid var(--line);border-radius:8px;background:var(--paper);display:flex;flex-direction:column}
+.room>button{all:unset;box-sizing:border-box;cursor:pointer;padding:1rem;display:flex;gap:.9rem;align-items:center}
+.room>button:focus-visible{outline:3px solid var(--focus);outline-offset:-3px;border-radius:8px}
+.room .plaque{min-width:5.25rem}
+.room .meta{font-size:.9rem;color:var(--muted)}
+.room .meta b{color:var(--ink);font-size:1rem}
+.room .apps{padding:0 1rem 1rem;font-size:.92rem}
+.room .apps h4{font-size:.85rem;margin:.75rem 0 .2rem;color:var(--maroon)}
+.room .apps ul{margin:0;padding:0;list-style:none}
+.room[data-open="true"]{grid-column:1/-1}
+.room[data-open="true"] .apps{columns:3 14rem;column-gap:1.5rem}
+.room .apps section{break-inside:avoid}
+.base-note{color:var(--muted);font-size:.85rem;margin:.5rem 0 0}
+
+.empty{padding:2rem;border:2px dashed var(--line);border-radius:8px;text-align:center}
+.empty button{margin-top:.75rem;border:2px solid var(--maroon);background:none;color:var(--maroon);
+  border-radius:999px;padding:.4rem 1rem;font-weight:700;cursor:pointer}
+
+/* Print + help */
+.extras{background:var(--mist);border-top:1px solid var(--line)}
+.extras .wrap{padding-top:2.25rem;padding-bottom:2.5rem;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
+.extras h2{font-stretch:112%;font-size:1.35rem;margin:0 0 .75rem}
+.extras h3{font-size:1rem;margin:1rem 0 .25rem;display:flex;gap:.6rem;align-items:center}
+.extras h3 .plaque{min-width:0;padding:.15rem .45rem .2rem}
+.extras h3 .plaque .code{font-size:.85rem}
+.extras ul{margin:.25rem 0 0;padding-left:1.1rem}
+.extras li{margin:.2rem 0}
+.extras p{margin:.25rem 0 .75rem;max-width:60ch}
+footer{padding:1.25rem 0;color:var(--muted);font-size:.85rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:540px){
+  .count b{font-size:1.1rem}
+  .row>button{grid-template-columns:1fr auto}
+}
+@media (prefers-reduced-motion:no-preference){
+  .where,.room .apps{animation:open .18s ease-out}
+  @keyframes open{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="wrap">
+    <p class="org">University of Redlands Los Angeles · Information Technology</p>
+    <h1>Find the software you need on campus</h1>
+    <p class="lede">Search for an app to see which labs, studios and classrooms have it, or browse room by room to see what's installed before you head over.</p>
+    <div class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <label for="q" class="sr">Search apps or rooms</label>
+      <input id="q" type="search" placeholder="Try Maya, Python, Premiere, or a room like MH202" autocomplete="off">
+    </div>
+    <ul class="facts" id="facts"></ul>
+  </div>
+</header>
+
+<section class="everywhere" aria-labelledby="ev-h">
+  <div class="wrap">
+    <h2 id="ev-h">On every lab and classroom computer</h2>
+    <ul id="everywhere"></ul>
+  </div>
+</section>
+
+<nav class="controls" aria-label="Browse options">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Browse by">
+      <button type="button" data-view="apps" aria-pressed="true">Browse by app</button>
+      <button type="button" data-view="rooms" aria-pressed="false">Browse by room</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter"></div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <p class="status" id="status" aria-live="polite"></p>
+    <div id="results"></div>
+  </div>
+</main>
+
+<section class="extras">
+  <div class="wrap">
+    <div>
+      <h2>Printing</h2>
+      <h3><span class="plaque"><span class="code">AL103</span></span>Architecture Print Center</h3>
+      <ul>
+        <li>Two HP DesignJet large-format plotters (Z6810 and Z6200ps) for boards and drawings up to 42 inches wide</li>
+        <li>Konica Minolta color printer</li>
+        <li>Paper cutter for trimming prints</li>
+      </ul>
+      <h3><span class="plaque"><span class="code">DC203</span></span>Printer Room</h3>
+      <ul><li>Two Konica Minolta color network printers</li></ul>
+    </div>
+    <div>
+      <h2>Good to know</h2>
+      <p><span class="lic">Shared license</span> apps have a limited number of seats that are shared across campus. If one won't open because all seats are in use, close it, wait a few minutes, and try again, or try another room.</p>
+      <p>Some rooms are used for scheduled classes, so check the posted schedule before settling in.</p>
+      <p>Can't find what you need, or something isn't working? Contact the IT Help Desk and let them know the room and the app.</p>
+    </div>
+  </div>
+</section>
+<footer><div class="wrap">Information Technology, University of Redlands Los Angeles. Software lists are maintained by IT and may change between terms.</div></footer>
+
+<script>
+const DATA = {"rooms":[{"c":"AL101","l":"Computer Lab","t":"lab"},{"c":"AL102","l":"Computer Lab","t":"lab"},{"c":"AN104","l":"Game / MoCap Room","t":"special"},{"c":"AN105","l":"Studio","t":"studio"},{"c":"AN106","l":"Stop Motion Stages A + B","t":"special"},{"c":"AN108","l":"Stop Motion Stages C + D","t":"special"},{"c":"AN111","l":"Studio","t":"studio"},{"c":"BB102","l":"Classroom","t":"class"},{"c":"BB104","l":"Classroom","t":"class"},{"c":"BB201","l":"Classroom","t":"class"},{"c":"BB202","l":"Classroom","t":"class"},{"c":"BB203","l":"Classroom","t":"class"},{"c":"BB204","l":"Classroom","t":"class"},{"c":"BB205","l":"Classroom","t":"class"},{"c":"BB206","l":"Classroom","t":"class"},{"c":"BB207","l":"Classroom","t":"class"},{"c":"BB208","l":"Classroom","t":"class"},{"c":"BB209","l":"Classroom","t":"class"},{"c":"BB210","l":"Classroom","t":"class"},{"c":"Cabrini","l":"Embroidery Room","t":"special"},{"c":"CH105","l":"Computer Lab","t":"lab"},{"c":"CH207","l":"Classroom","t":"class"},{"c":"DC101","l":"Studio","t":"studio"},{"c":"DC103","l":"Studio","t":"studio"},{"c":"DC104","l":"Studio","t":"studio"},{"c":"DC116","l":"Studio","t":"studio"},{"c":"DC201","l":"Computer Lab","t":"lab"},{"c":"DC202","l":"Computer Lab","t":"lab"},{"c":"DC205","l":"Lab / Studio","t":"special"},{"c":"DC207","l":"Classroom","t":"class"},{"c":"DC208","l":"Computer Lab","t":"lab"},{"c":"DC209","l":"Classroom","t":"class"},{"c":"EM101","l":"Screening Room","t":"special"},{"c":"FC101","l":"Biology Lab","t":"special"},{"c":"LA106","l":"Electronic Study Hall","t":"special"},{"c":"LI101","l":"Library Main Space","t":"special"},{"c":"Making Complex","l":"Specialty space","t":"special"},{"c":"MH111","l":"Distance Learning Room","t":"special"},{"c":"MH202","l":"Computer Lab","t":"lab"},{"c":"MH204","l":"Computer Lab","t":"lab"},{"c":"MH205","l":"Computer Lab","t":"lab"},{"c":"MH206","l":"Computer Lab","t":"lab"},{"c":"MH207","l":"Computer Lab","t":"lab"},{"c":"MH209","l":"Computer Lab","t":"lab"},{"c":"NB100","l":"Classroom","t":"class"},{"c":"SB102","l":"Physics Lab","t":"special"},{"c":"WH130","l":"Classroom / Seminar Room","t":"class"}],"apps":[{"n":"Adobe Acrobat","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Create, edit, sign and combine PDFs."},{"n":"Adobe After Effects","f":"No","r":[0,1,2,3,4,5,6,22,23,24,25,26,27,28,29,30,37,38,39,40,41,42,43],"c":"media","d":"Motion graphics, compositing and visual effects."},{"n":"Adobe Animate","f":"No","r":[0,1,2,6,28,37,38,39,42,43],"c":"3d","d":"2D vector animation for web and interactive projects."},{"n":"Adobe Audition","f":"No","r":[0,1,2,6,26,27,28,29,30,38,39,40,41,42,43],"c":"media","d":"Record, edit and mix audio."},{"n":"Adobe Character Animator","f":"No","r":[2,42,43],"c":"3d","d":"Animate characters live using your webcam and voice."},{"n":"Adobe Illustrator","f":"No","r":[0,1,2,3,6,19,20,22,23,24,25,26,27,28,29,30,36,37,38,39,40,41,42,43],"c":"design","d":"Vector illustration, logos and type."},{"n":"Adobe InCopy","f":"No","r":[0,1,2,39,42,43],"c":"design","d":"Copy editing that works alongside InDesign layouts."},{"n":"Adobe InDesign","f":"No","r":[0,1,2,3,6,26,27,28,37,38,39,40,41,42,43],"c":"design","d":"Page layout for print and digital publications."},{"n":"Adobe Lightroom","f":"No","r":[0,1,2,3,6,22,23,24,25,26,27,28,29,30,38,39,40,41,42,43],"c":"design","d":"Organize and edit photographs."},{"n":"Adobe Photoshop","f":"No","r":[0,1,2,3,4,5,6,19,20,22,23,24,25,26,27,28,29,30,36,37,38,39,40,41,42,43],"c":"design","d":"Image editing, retouching and compositing."},{"n":"Adobe Premiere Pro","f":"No","r":[0,1,2,3,4,5,6,26,27,28,37,38,39,40,41,42,43],"c":"media","d":"Professional video editing."},{"n":"Adobe Substance 3D Designer","f":"No","r":[0,1,2,6,26,27,28,38,39,42,43],"c":"3d","d":"Build procedural materials and textures."},{"n":"Adobe Substance 3D Modeler","f":"No","r":[0,1,2,6,26,27,28,38,39,42,43],"c":"3d","d":"Sculpt 3D models on desktop or in VR."},{"n":"Adobe Substance 3D Painter","f":"No","r":[0,1,2,6,26,27,28,38,39,42,43],"c":"3d","d":"Paint textures directly onto 3D models."},{"n":"Adobe Substance 3D Sampler","f":"No","r":[0,1,2,6,26,27,28,38,39,42,43],"c":"3d","d":"Turn photos into 3D materials."},{"n":"Adobe Substance 3D Stager","f":"No","r":[0,1,2,6,26,27,28,38,39,42,43],"c":"3d","d":"Stage, light and render 3D scenes."},{"n":"Akeytsu","f":"No","r":[2,42,43],"c":"3d","d":"Character rigging and keyframe animation."},{"n":"Amaya OS","f":"No","r":[19],"c":"fashion","d":"Embroidery machine design software."},{"n":"Apache Spark","f":"No","r":[26],"c":"data","d":"Large-scale data processing."},{"n":"ArcGIS Pro","f":"No","r":[0,1,33],"c":"data","d":"Professional mapping and spatial analysis."},{"n":"Audacity","f":"No","r":[2,26,37,42,43],"c":"media","d":"Free, simple audio recording and editing."},{"n":"Autodesk 3ds Max","f":"Yes","r":[0,1,38,39],"c":"3d","d":"3D modeling, animation and rendering."},{"n":"Autodesk AutoCAD Architecture","f":"Yes","r":[0,1,38,39],"c":"arch","d":"2D and 3D drafting for architectural drawings."},{"n":"Autodesk Maya","f":"Yes","r":[0,1,2,6,26,27,28,38,39,42,43],"c":"3d","d":"Industry-standard 3D animation, modeling and simulation."},{"n":"Autodesk Motion Builder","f":"Yes","r":[0,1,2,38,39,42,43],"c":"3d","d":"Motion capture editing and character animation."},{"n":"Autodesk Revit","f":"Yes","r":[0,1,38,39],"c":"arch","d":"Building information modeling (BIM)."},{"n":"Axis Studio","f":"No","r":[2],"c":"3d","d":"Capture software for motion capture suits."},{"n":"BigML","f":"No","r":[26],"c":"data","d":"Point-and-click machine learning."},{"n":"Blender","f":"No","r":[0,1,2,42,43],"c":"3d","d":"Free, open-source 3D creation suite."},{"n":"Capstone","f":"No","r":[45],"c":"sci","d":"Data collection and analysis for science labs."},{"n":"Climate Consultant","f":"No","r":[0,1,38,39],"c":"arch","d":"Visualize climate data for building design."},{"n":"CLO3D","f":"No","r":[26],"c":"fashion","d":"3D garment design and virtual fitting."},{"n":"Conductor Companion","f":"No","r":[6,27,28],"c":"3d","d":"Submit renders to the cloud render farm."},{"n":"D3.JS","f":"No","r":[26],"c":"data","d":"JavaScript library for data visualization."},{"n":"Data Studio","f":"No","r":[45],"c":"data","d":"Build dashboards and data reports."},{"n":"Design Shop","f":"No","r":[19],"c":"fashion","d":"Embroidery and textile design."},{"n":"Dragonframe","f":"No","r":[4,5],"c":"media","d":"Stop-motion animation capture."},{"n":"Eclipse","f":"No","r":[26],"c":"data","d":"Programming environment, mostly for Java."},{"n":"Final Draft","f":"No","r":[3,43],"c":"media","d":"Screenwriting software."},{"n":"ggplot2","f":"No","r":[26],"c":"data","d":"Charting and graphics for R."},{"n":"HEED","f":"No","r":[0,1,38,39],"c":"arch","d":"Energy-efficient home design analysis."},{"n":"Jupyter","f":"No","r":[26],"c":"data","d":"Notebooks for code, data and notes."},{"n":"Map Tiler","f":"No","r":[33],"c":"data","d":"Create and publish map tiles."},{"n":"Marmoset Toolbag","f":"No","r":[42,43],"c":"3d","d":"Real-time rendering and texture baking."},{"n":"Marvelous Designer","f":"Yes","r":[6,27,28,42,43],"c":"fashion","d":"3D cloth and garment simulation."},{"n":"Matplotlib","f":"No","r":[26],"c":"data","d":"Charting library for Python."},{"n":"Microsoft Excel","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Spreadsheets and data analysis."},{"n":"Microsoft Outlook","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Email and calendar."},{"n":"Microsoft PowerPoint","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Presentations."},{"n":"Microsoft Teams","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Chat, meetings and class collaboration."},{"n":"Microsoft Word","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Documents and writing."},{"n":"MySQL Community Edition","f":"No","r":[26],"c":"data","d":"Open-source relational database."},{"n":"MySQL Workbench CE","f":"No","r":[26],"c":"data","d":"Visual tool for designing and querying MySQL databases."},{"n":"NLTK","f":"No","r":[26],"c":"data","d":"Natural language processing in Python."},{"n":"OBS Studio","f":"No","r":[2,26,42,43,45],"c":"media","d":"Screen recording and live streaming."},{"n":"Opaque","f":"No","r":[0,1,38,39],"c":"arch","d":"Analyze heat flow through walls and roofs."},{"n":"Open Physics","f":"No","r":[45],"c":"sci","d":"Physics simulations and experiments."},{"n":"Pixar Renderman","f":"Yes","r":[6,27,28],"c":"3d","d":"Pixar\u2019s production renderer."},{"n":"PureRef","f":"No","r":[2,42,43],"c":"3d","d":"Collect and arrange reference images."},{"n":"PyCharm","f":"No","r":[26],"c":"data","d":"Python programming environment."},{"n":"Python","f":"No","r":[26],"c":"data","d":"General-purpose programming language."},{"n":"QGIS","f":"No","r":[33],"c":"data","d":"Free, open-source mapping and GIS."},{"n":"R","f":"No","r":[26],"c":"data","d":"Statistics and data analysis language."},{"n":"Rhino","f":"Yes","r":[0,1,28,36,38,39],"c":"arch","d":"3D modeling for architecture and design."},{"n":"RhinoCAM","f":"Yes","r":[0,1,36],"c":"arch","d":"Prepare Rhino models for CNC machining."},{"n":"SAS OnDemand for Academics","f":"No","r":[26],"c":"data","d":"Statistical analysis software."},{"n":"Scikit-learn","f":"No","r":[26],"c":"data","d":"Machine learning library for Python."},{"n":"TensorFlow","f":"No","r":[26],"c":"data","d":"Deep learning library."},{"n":"Toon Boom Harmony Premium","f":"Hybrid","r":[6,27,28,40],"c":"3d","d":"Professional 2D animation."},{"n":"Toon Boom Storyboard Pro","f":"Hybrid","r":[6,27,28,40],"c":"media","d":"Storyboarding and animatics."},{"n":"TukaCAD","f":"No","r":[26],"c":"fashion","d":"Pattern making and grading for apparel."},{"n":"Twin Motion","f":"No","r":[0,1],"c":"arch","d":"Real-time architectural visualization."},{"n":"Unity Engine","f":"No","r":[2,26,42,43],"c":"3d","d":"Game engine for 2D, 3D, VR and AR."},{"n":"Unreal Engine","f":"No","r":[2,26,42,43],"c":"3d","d":"Game engine and real-time 3D."},{"n":"V-Ray for Maya","f":"Yes","r":[2,42,43],"c":"3d","d":"Photorealistic rendering in Maya."},{"n":"V-Ray for Rhino","f":"Yes","r":[0,1,38,39],"c":"arch","d":"Photorealistic rendering in Rhino."},{"n":"Visual Studio Community","f":"No","r":[26],"c":"data","d":"Programming environment for C#, C++ and more."},{"n":"Z-Brush","f":"Yes","r":[42,43],"c":"3d","d":"Digital sculpting."},{"n":"Zoom","f":"No","r":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"c":"office","d":"Video meetings."}],"cats":{"design":"Graphic design & photo","media":"Video, audio & motion","3d":"3D, animation & games","arch":"Architecture, CAD & fabrication","fashion":"Fashion & textiles","data":"Data, code & GIS","sci":"Science","office":"Productivity & communication"}};
+const {rooms, apps, cats} = DATA;
+const TYPES = {lab:'Computer labs', studio:'Studios', class:'Classrooms', special:'Specialty spaces'};
+const total = rooms.length;
+const everywhere = apps.filter(a => a.r.length === total);
+const rest = apps.filter(a => a.r.length !== total);
+const catOrder = Object.keys(cats);
+const state = {view:'apps', q:'', cat:'all', type:'all', open:null};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'');
+
+$('#everywhere').innerHTML = everywhere.map(a => `<li>${esc(a.n)}</li>`).join('');
+$('#facts').innerHTML = `<li><b>${apps.length}</b> apps</li><li><b>${total}</b> rooms</li><li><b>${rooms.filter(r=>r.t==='lab').length}</b> computer labs</li>`;
+
+function plaque(i){ const r = rooms[i]; return `<li class="plaque"><span class="code">${esc(r.c)}</span><span class="lbl">${esc(r.l)}</span></li>`; }
+function matchesRoom(r, q){ return norm(r.c).includes(q) || norm(r.l).includes(q); }
+function appMatch(a, q){
+  if (!q) return true;
+  return norm(a.n).includes(q) || norm(a.d).includes(q) || a.r.some(i => matchesRoom(rooms[i], q));
+}
+
+function renderChips(){
+  const opts = state.view === 'apps'
+    ? [['all','All apps'], ...catOrder.filter(c => rest.some(a=>a.c===c)).map(c => [c, cats[c]])]
+    : [['all','All rooms'], ...Object.entries(TYPES)];
+  const cur = state.view === 'apps' ? state.cat : state.type;
+  $('#chips').innerHTML = opts.map(([k,l]) => `<button type="button" class="chip" data-k="${k}" aria-pressed="${k===cur}">${esc(l)}</button>`).join('');
+}
+
+function renderApps(){
+  const q = norm(state.q);
+  const pool = q ? apps : rest;
+  const list = pool.filter(a => (state.cat==='all' || a.c===state.cat) && appMatch(a,q));
+  const groups = catOrder.map(c => [c, list.filter(a => a.c===c).sort((x,y)=>y.r.length-x.r.length || x.n.localeCompare(y.n))]).filter(g => g[1].length);
+  $('#status').textContent = q || state.cat!=='all' ? `${list.length} app${list.length===1?'':'s'} found` : `Showing ${list.length} specialized apps. Tap any app to see where it's installed.`;
+  if (!list.length) return empty();
+  $('#results').innerHTML = groups.map(([c, as]) => `
+    <h3 class="group">${esc(cats[c])}</h3>
+    <ul class="list">${as.map(a => {
+      const id = 'a-' + norm(a.n), open = state.open === id;
+      const lic = a.f === 'Yes' || a.f === 'Hybrid' ? '<span class="lic">Shared license</span>' : '';
+      const rs = q && !norm(a.n).includes(q) && !norm(a.d).includes(q) ? a.r.filter(i => matchesRoom(rooms[i], q)) : a.r;
+      return `<li class="row">
+        <button type="button" data-open="${id}" aria-expanded="${open}" aria-controls="${id}">
+          <span class="name">${esc(a.n)}${lic}</span>
+          <span class="desc">${esc(a.d)}</span>
+          <span class="count"><b>${a.r.length}</b>${a.r.length===1?'room':'rooms'}</span>
+        </button>
+        ${open ? `<div class="where" id="${id}"><p>Installed in:</p><ul class="plaques">${rs.map(plaque).join('')}</ul></div>` : ''}
+      </li>`; }).join('')}
+    </ul>`).join('');
+}
+
+function renderRooms(){
+  const q = norm(state.q);
+  const idx = rooms.map((r,i)=>i).filter(i => {
+    const r = rooms[i];
+    if (state.type!=='all' && r.t!==state.type) return false;
+    if (!q) return true;
+    return matchesRoom(r,q) || apps.some(a => a.r.includes(i) && (norm(a.n).includes(q)));
+  });
+  $('#status').textContent = q ? `${idx.length} room${idx.length===1?'':'s'} match "${state.q}"` : `${idx.length} rooms. Tap a room to see everything installed there.`;
+  if (!idx.length) return empty();
+  const types = Object.keys(TYPES).filter(t => idx.some(i => rooms[i].t===t));
+  $('#results').innerHTML = types.map(t => `
+    <h3 class="group">${TYPES[t]}</h3>
+    <ul class="rooms">${idx.filter(i=>rooms[i].t===t).map(i => {
+      const r = rooms[i], id = 'r-' + i, open = state.open === id;
+      const here = rest.filter(a => a.r.includes(i));
+      const byCat = catOrder.map(c => [c, here.filter(a=>a.c===c)]).filter(g=>g[1].length);
+      return `<li class="room" data-open="${open}">
+        <button type="button" data-open="${id}" aria-expanded="${open}" aria-controls="${id}">
+          <span class="plaque"><span class="code">${esc(r.c)}</span></span>
+          <span class="meta"><b>${esc(r.l)}</b><br>${here.length ? `${here.length} specialized app${here.length===1?'':'s'}` : 'Standard software'}</span>
+        </button>
+        ${open ? `<div class="apps" id="${id}">
+          ${byCat.map(([c,as]) => `<section><h4>${esc(cats[c])}</h4><ul>${as.map(a=>`<li>${esc(a.n)}</li>`).join('')}</ul></section>`).join('')}
+          <p class="base-note">Plus the standard set: ${everywhere.map(a=>esc(a.n.replace('Microsoft ',''))).join(', ')}.</p>
+        </div>` : ''}
+      </li>`; }).join('')}
+    </ul>`).join('');
+}
+
+function empty(){
+  $('#results').innerHTML = `<div class="empty"><p>Nothing matches "${esc(state.q)}". Check the spelling, or search by room code like DC201.</p><button type="button" id="clear">Clear search</button></div>`;
+}
+
+function render(){ renderChips(); state.view==='apps' ? renderApps() : renderRooms(); }
+
+$('#q').addEventListener('input', e => { state.q = e.target.value.trim(); state.open = null; render(); });
+document.querySelector('.seg').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  state.view = b.dataset.view; state.open = null;
+  document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x===b));
+  render();
+});
+$('#chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  state[state.view==='apps' ? 'cat' : 'type'] = b.dataset.k; state.open = null; render();
+});
+$('#results').addEventListener('click', e => {
+  if (e.target.id === 'clear'){ $('#q').value=''; state.q=''; render(); $('#q').focus(); return; }
+  const b = e.target.closest('[data-open]'); if (!b || b.tagName!=='BUTTON') return;
+  const id = b.dataset.open;
+  state.open = state.open === id ? null : id;
+  render();
+  const nb = document.querySelector(`button[data-open="${id}"]`); if (nb) nb.focus();
+});
+render();
+</script>
+</body>
+</html>
